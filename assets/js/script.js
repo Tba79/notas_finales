@@ -2,40 +2,32 @@
 let nombreAlumno = prompt("Ingresa el nombre del alumno:");
 let carreraAlumno = prompt("Ingresa la carrera del alumno:");
 
-// Insertar nombre y carrera 
+// Insertar nombre y carrera en el HTML
 document.getElementById("nombre-alumno").innerText = nombreAlumno;
 document.getElementById("carrera-alumno").innerText = carreraAlumno;
 
-// Función para pedir notas
+// Función para pedir notas, calcular el promedio y actualizar la tabla
 function calcularNotas(ramo, idNota1, idNota2, idNota3, idPromedio) {
     let nota1 = prompt(`Ingresa la primera nota para ${ramo}:`);
     let nota2 = prompt(`Ingresa la segunda nota para ${ramo}:`);
     let nota3 = prompt(`Ingresa la tercera nota para ${ramo}:`);
 
-    let notas = [];
-    
-    // Validar y agregar notas 
-    if (nota1 !== "" && !isNaN(nota1) && nota1 >= 1 && nota1 <= 7) {
-        notas.push(parseFloat(nota1));
-    }
-    if (nota2 !== "" && !isNaN(nota2) && nota2 >= 1 && nota2 <= 7) {
-        notas.push(parseFloat(nota2));
-    }
-    if (nota3 !== "" && !isNaN(nota3) && nota3 >= 1 && nota3 <= 7) {
-        notas.push(parseFloat(nota3));
-    }
+    // Si una nota no es ingresada, se considera como 0
+    nota1 = nota1 !== "" && !isNaN(nota1) && nota1 >= 1 && nota1 <= 7 ? parseFloat(nota1) : 0;
+    nota2 = nota2 !== "" && !isNaN(nota2) && nota2 >= 1 && nota2 <= 7 ? parseFloat(nota2) : 0;
+    nota3 = nota3 !== "" && !isNaN(nota3) && nota3 >= 1 && nota3 <= 7 ? parseFloat(nota3) : 0;
 
-    // Calcular el promedio 
-    let promedio = notas.reduce((acc, val) => acc + val, 0) / notas.length;
+    // Calcular el promedio considerando todas las notas, incluyendo las que faltan
+    let promedio = (nota1 + nota2 + nota3) / 3;
 
-    // Mostrar tabla con notas y promedio
-    document.getElementById(idNota1).innerText = nota1 !== "" ? parseFloat(nota1).toFixed(2) : "--";
-    document.getElementById(idNota2).innerText = nota2 !== "" ? parseFloat(nota2).toFixed(2) : "--";
-    document.getElementById(idNota3).innerText = nota3 !== "" ? parseFloat(nota3).toFixed(2) : "--";
+    // Actualizar la tabla con las notas y el promedio
+    document.getElementById(idNota1).innerText = nota1 !== 0 ? nota1.toFixed(2) : "--";
+    document.getElementById(idNota2).innerText = nota2 !== 0 ? nota2.toFixed(2) : "--";
+    document.getElementById(idNota3).innerText = nota3 !== 0 ? nota3.toFixed(2) : "--";
 
     // Mostrar el promedio y cambiar el color si es menor a 4
     let promedioElement = document.getElementById(idPromedio);
-    promedioElement.innerText = notas.length > 0 ? promedio.toFixed(2) : "--";
+    promedioElement.innerText = promedio.toFixed(2);
     if (promedio < 4) {
         promedioElement.classList.add("promedio-bajo");
     } else {
